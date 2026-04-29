@@ -267,14 +267,15 @@ Risk Score = (0.35 × Exposure) + (0.30 × Detection) + (0.20 × Response) + (0.
 | fail2ban | 24 (−14.3%) | 3000 (−37.5%) | 6.70 | 7.69 (HIGH) |
 | crowdsec | 18 (−35.7%) | 2402 (−50.0%) | 6.26 | 6.62 (HIGH) |
 
-**Charts** (digenerate otomatis setelah benchmark):
+**Charts:**
 
-| Chart | Path |
-|---|---|
-| SSH Attempts | `results/charts/chart_ssh_attempts.png` |
-| HTTP Responses | `results/charts/chart_http_responses.png` |
-| CPU Overhead | `results/charts/chart_cpu_overhead.png` |
-| Risk Scores | `results/charts/chart_risk_scores.png` |
+| SSH Brute-Force Attempts | HTTP Response Distribution |
+|:---:|:---:|
+| ![SSH Attempts](results/charts/chart_ssh_attempts.png) | ![HTTP Responses](results/charts/chart_http_responses.png) |
+
+| CPU Overhead per Mode | Risk Score Breakdown |
+|:---:|:---:|
+| ![CPU Overhead](results/charts/chart_cpu_overhead.png) | ![Risk Scores](results/charts/chart_risk_scores.png) |
 
 ---
 

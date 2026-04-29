@@ -124,6 +124,10 @@ Keterangan komponen:
 
 > 📊 Lihat chart: `results/charts/chart_ssh_attempts.png` · `results/charts/chart_http_responses.png`
 
+| SSH Brute-Force Attempts | HTTP Response Distribution |
+|:---:|:---:|
+| ![SSH Attempts](../results/charts/chart_ssh_attempts.png) | ![HTTP Responses](../results/charts/chart_http_responses.png) |
+
 ### 3.2 Analisis Komparatif vs Baseline
 
 ```
@@ -161,6 +165,8 @@ crowdsec  [███████░░░]  6.62  HIGH  ← terendah (terbaik)
 
 > 📊 Lihat chart: `results/charts/chart_risk_scores.png`
 
+![Risk Score Breakdown](../results/charts/chart_risk_scores.png)
+
 ### 3.4 Resource Usage
 
 | Mode | CPU Avg (%) | Memory Avg (%) | Overhead vs Baseline |
@@ -174,6 +180,8 @@ CPU Overhead (%) = mode_cpu_avg - baseline_cpu_avg
 ```
 
 > 📊 Lihat chart: `results/charts/chart_cpu_overhead.png`
+
+![CPU Overhead per Mode](../results/charts/chart_cpu_overhead.png)
 
 ---
 
