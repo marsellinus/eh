@@ -1,0 +1,9 @@
+filenames:
+  - /var/log/nginx/access.log
+labels:
+  type: nginx
+---
+filenames:
+  - /var/log/ssh/auth.log
+labels:
+  type: sshd

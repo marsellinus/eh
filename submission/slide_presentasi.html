@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Slide Presentasi — CrowdSec vs Fail2Ban</title>
+<style>
+:root{--bg:#06141b;--card:#f4f3ee;--ink:#0e1b22;--muted:#4f6772;--accent:#ff6b35;--teal:#2a9d8f;--ok:#2f9e44;--warn:#e67700;--red:#e63946;--blue:#3a86ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",sans-serif;background:#1a1a2e;color:var(--ink);min-height:100vh}
+
+/* ── Nav ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,20,27,.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid rgba(255,255,255,.08)}
+.nav-title{color:#c8dce5;font-size:.85rem;font-weight:600}
+.nav-controls{display:flex;align-items:center;gap:10px}
+.nav-btn{border:0;background:rgba(255,255,255,.1);color:#c8dce5;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:.85rem;transition:background 150ms}
+.nav-btn:hover{background:rgba(255,255,255,.2)}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+#slide-counter{color:#c8dce5;font-size:.85rem;min-width:60px;text-align:center}
+
+/* ── Slide container ── */
+.slides{padding-top:56px}
+.slide{display:none;min-height:calc(100vh - 56px);padding:48px 64px;position:relative;animation:fadeIn 250ms ease}
+.slide.active{display:flex;flex-direction:column;justify-content:center}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Slide themes ── */
+.slide-cover{background:linear-gradient(135deg,#06141b 0%,#1a3d4f 60%,#0d2b38 100%);color:#f4f3ee}
+.slide-cover h1{font-size:clamp(1.8rem,3.5vw,2.8rem);line-height:1.2;margin-bottom:16px;color:#fff}
+.slide-cover .subtitle{font-size:1.1rem;color:#a8c8d8;margin-bottom:32px}
+.slide-cover .meta-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:18px 24px;display:inline-block}
+.slide-cover .meta-box p{color:#c8dce5;font-size:.9rem;line-height:1.8}
+
+.slide-content{background:var(--card)}
+.slide-content h2{font-size:clamp(1.4rem,2.5vw,2rem);color:#0d2b38;margin-bottom:24px;padding-bottom:12px;border-bottom:3px solid var(--teal)}
+
+.slide-dark{background:linear-gradient(135deg,#0d2b38,#1a3d4f);color:#f4f3ee}
+.slide-dark h2{font-size:clamp(1.4rem,2.5vw,2rem);color:#fff;margin-bottom:24px;padding-bottom:12px;border-bottom:3px solid var(--accent)}
+
+/* ── Slide number badge ── */
+.slide-num{position:absolute;top:20px;right:24px;background:rgba(42,157,143,.2);color:var(--teal);border-radius:20px;padding:4px 12px;font-size:.78rem;font-weight:700}
+.slide-dark .slide-num{background:rgba(255,107,53,.2);color:#ff9a6c}
+
+/* ── Content components ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+
+.card{background:#fff;border-radius:14px;padding:18px;border:1px solid #d5dee2;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.card-dark{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:18px}
+.card h3{font-size:1rem;margin-bottom:10px;color:#0d2b38}
+.card-dark h3{color:#fff}
+
+.stat-big{font-size:2.4rem;font-weight:800;line-height:1}
+.stat-label{font-size:.8rem;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+
+ul.points{padding-left:20px;line-height:2}
+ul.points li{font-size:.95rem;color:#304450}
+ul.points.light li{color:#c8dce5}
+
+table.data{width:100%;border-collapse:collapse;font-size:.88rem}
+table.data th{background:#0d2b38;color:#fff;padding:8px 10px;text-align:left}
+table.data td{padding:8px 10px;border-bottom:1px solid #d5dee2}
+table.data tr:last-child td{border-bottom:none}
+table.data tr:nth-child(even) td{background:#f0f4f5}
+
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700}
+.badge-ok{background:#d3f9d8;color:#1a6b2a}
+.badge-warn{background:#fff3bf;color:#7a4f00}
+.badge-bad{background:#ffe3e3;color:#8b0000}
+.badge-info{background:#d0ebff;color:#1864ab}
+
+/* ── Bar chart ── */
+.bar-wrap{margin-top:8px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bar-label{width:80px;font-size:.82rem;font-weight:600;color:#304450;flex-shrink:0}
+.bar-label.light{color:#c8dce5}
+.bar-bg{flex:1;height:22px;background:#e9ecef;border-radius:11px;overflow:hidden}
+.bar-bg.dark{background:rgba(255,255,255,.12)}
+.bar-fill{height:100%;border-radius:11px;display:flex;align-items:center;padding-left:8px;font-size:.78rem;font-weight:700;color:#fff;transition:width .6s ease}
+.bar-val{width:50px;text-align:right;font-size:.82rem;font-weight:700;flex-shrink:0}
+
+/* ── Highlight box ── */
+.highlight{background:linear-gradient(135deg,rgba(42,157,143,.15),rgba(42,157,143,.05));border:2px solid var(--teal);border-radius:14px;padding:16px 20px;margin-top:16px}
+.highlight-dark{background:rgba(255,107,53,.1);border:2px solid var(--accent);border-radius:14px;padding:16px 20px;margin-top:16px}
+.highlight p,.highlight-dark p{font-size:.95rem;line-height:1.6}
+
+/* ── Diagram ── */
+.arch-diagram{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin:16px 0}
+.arch-box{background:#fff;border:2px solid #d5dee2;border-radius:12px;padding:12px 16px;text-align:center;font-size:.82rem;font-weight:600;color:#0d2b38;min-width:100px}
+.arch-box.attacker{background:#ffe3e3;border-color:var(--red);color:var(--red)}
+.arch-box.protection{background:#d3f9d8;border-color:var(--ok);color:#1a6b2a}
+.arch-box.target{background:#d0ebff;border-color:var(--blue);color:#1864ab}
+.arch-arrow{font-size:1.4rem;color:#607d8b;padding:0 8px}
+
+/* ── Progress bar (slide nav) ── */
+.progress{position:fixed;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--accent));transition:width .3s ease}
+
+/* ── Keyboard hint ── */
+.key-hint{position:fixed;bottom:12px;right:16px;font-size:.72rem;color:rgba(255,255,255,.3)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-title">🔬 CrowdSec vs Fail2Ban — Seminar Akademik Digital Forensics</div>
+  <div class="nav-controls">
+    <button class="nav-btn" id="btn-prev">← Prev</button>
+    <span id="slide-counter">1 / 12</span>
+    <button class="nav-btn" id="btn-next">Next →</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 1 ══ -->
+<div class="slides">
+<div class="slide slide-cover active" id="s1">
+  <div class="slide-num">01 / 12</div>
+  <div style="max-width:700px">
+    <div style="font-size:.85rem;color:var(--teal);font-weight:700;letter-spacing:.1em;margin-bottom:12px">SEMINAR AKADEMIK DIGITAL FORENSICS</div>
+    <h1>Analisis Komparatif Efektivitas CrowdSec versus Fail2Ban dalam Memitigasi Serangan pada Layanan Home Server Berbasis Docker</h1>
+    <p class="subtitle">Studi Eksperimental — Lab Terkontrol</p>
+    <div class="meta-box">
+      <p>📚 Mata Kuliah: Digital Forensics</p>
+      <p>🏫 Program Studi: Teknik Informatika</p>
+      <p>📅 2026</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 2 ══ -->
+<div class="slide slide-content" id="s2">
+  <div class="slide-num">02 / 12</div>
+  <h2>🌐 Latar Belakang</h2>
+  <div class="two-col">
+    <div>
+      <ul class="points">
+        <li>Home server berbasis Docker semakin populer untuk self-hosting layanan pribadi</li>
+        <li>Layanan yang terekspos ke jaringan rentan terhadap serangan otomatis</li>
+        <li>SSH brute-force dan HTTP flood adalah dua vektor serangan paling umum</li>
+        <li>Dua solusi open-source populer: <strong>Fail2Ban</strong> (rule-based) dan <strong>CrowdSec</strong> (collaborative threat intelligence)</li>
+        <li>Belum ada perbandingan kuantitatif keduanya dalam konteks Docker environment</li>
+      </ul>
+      <div class="highlight">
+        <p>❓ <strong>Pertanyaan utama:</strong> Mana yang lebih efektif dan efisien untuk home server Docker — Fail2Ban atau CrowdSec?</p>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3>⚠️ Ancaman yang Diuji</h3>
+        <div style="margin-top:12px">
+          <div style="background:#ffe3e3;border-radius:10px;padding:12px;margin-bottom:10px">
+            <div style="font-weight:700;color:var(--red);margin-bottom:4px">HTTP Flood</div>
+            <div style="font-size:.85rem;color:#304450">500 requests, concurrency 25<br/>Target: nginx port 8081</div>
+          </div>
+          <div style="background:#fff3bf;border-radius:10px;padding:12px">
+            <div style="font-weight:700;color:var(--warn);margin-bottom:4px">SSH Brute-Force</div>
+            <div style="font-size:.85rem;color:#304450">40 attempts, delay 0.2s<br/>Target: OpenSSH port 2222</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 3 ══ -->
+<div class="slide slide-content" id="s3">
+  <div class="slide-num">03 / 12</div>
+  <h2>🎯 Rumusan Masalah & Tujuan</h2>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <h3>❓ Rumusan Masalah</h3>
+        <ol style="padding-left:18px;line-height:2;font-size:.92rem;color:#304450">
+          <li>Seberapa efektif CrowdSec dan Fail2Ban dalam mereduksi serangan SSH brute-force dan HTTP flood?</li>
+          <li>Berapa overhead resource (CPU/memory) yang ditimbulkan masing-masing solusi?</li>
+          <li>Solusi mana yang lebih direkomendasikan untuk home server Docker?</li>
+        </ol>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>🔒 Batasan Eksperimen</h3>
+        <ul class="points">
+          <li>Semua serangan hanya menarget <strong>localhost/jaringan privat</strong></li>
+          <li>Untuk keperluan akademik dan lab terkontrol</li>
+          <li>Platform: Docker Compose pada Linux</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3>✅ Tujuan Penelitian</h3>
+        <ul class="points">
+          <li>Mengukur efektivitas mitigasi serangan SSH brute-force dan HTTP flood secara kuantitatif</li>
+          <li>Membandingkan overhead resource (CPU/memory) kedua solusi</li>
+          <li>Menghitung risk score komposit (CVSS-like) untuk setiap mode</li>
+          <li>Menentukan solusi terbaik untuk home server Docker</li>
+          <li>Membandingkan dengan baseline ML (RandomForest, NSL-KDD)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 4 ══ -->
+<div class="slide slide-dark" id="s4">
+  <div class="slide-num">04 / 12</div>
+  <h2>🏗️ Arsitektur Eksperimen</h2>
+  <div class="arch-diagram">
+    <div class="arch-box attacker">🔴 Attacker<br/><small>localhost</small></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box protection">🛡️ Fail2Ban /<br/>CrowdSec</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box target">🌐 nginx<br/><small>:8081</small></div>
+    <div style="width:100%;height:0"></div>
+    <div style="width:180px"></div>
+    <div class="arch-arrow" style="visibility:hidden">→</div>
+    <div class="arch-box target" style="margin-top:10px">🔑 SSH Target<br/><small>:2222</small></div>
+  </div>
+  <div class="three-col" style="margin-top:20px">
+    <div class="card-dark">
+      <h3>🐳 Stack Baseline</h3>
+      <ul class="points light" style="font-size:.85rem">
+        <li>nginx:1.27-alpine</li>
+        <li>Debian 12 + OpenSSH</li>
+        <li>Tanpa proteksi aktif</li>
+      </ul>
+    </div>
+    <div class="card-dark">
+      <h3>🛡️ Stack Fail2Ban</h3>
+      <ul class="points light" style="font-size:.85rem">
+        <li>crazymax/fail2ban:1.1.0</li>
+        <li>Jail: sshd-docker, nginx-http-flood</li>
+        <li>Backend: iptables</li>
+      </ul>
+    </div>
+    <div class="card-dark">
+      <h3>🌐 Stack CrowdSec</h3>
+      <ul class="points light" style="font-size:.85rem">
+        <li>crowdsecurity/crowdsec:latest</li>
+        <li>Bouncer: docker-bouncer</li>
+        <li>Threat intelligence: collaborative</li>
+      </ul>
+    </div>
+  </div>
+  <div class="highlight-dark" style="margin-top:16px">
+    <p>📁 Semua log di-mount ke <code>logs/</code> — nginx access.log, SSH auth.log, Fail2Ban log, CrowdSec metrics</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 5 ══ -->
+<div class="slide slide-content" id="s5">
+  <div class="slide-num">05 / 12</div>
+  <h2>🔬 Metodologi</h2>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <h3>📋 Alur Eksperimen</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="background:#0d2b38;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0">1</div>
+            <div style="font-size:.88rem;color:#304450">Reset environment (log, container, iptables)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="background:#0d2b38;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0">2</div>
+            <div style="font-size:.88rem;color:#304450">Start Docker stack (baseline / fail2ban / crowdsec)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="background:#0d2b38;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0">3</div>
+            <div style="font-size:.88rem;color:#304450">Jalankan HTTP flood + SSH brute-force secara paralel</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="background:#0d2b38;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0">4</div>
+            <div style="font-size:.88rem;color:#304450">Collect docker stats (CPU/memory) setiap 2 detik</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="background:#0d2b38;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0">5</div>
+            <div style="font-size:.88rem;color:#304450">Parse log → JSON/CSV → analisis komparatif</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3>📏 Metrik yang Diukur</h3>
+        <table class="data">
+          <tr><th>Metrik</th><th>Sumber</th></tr>
+          <tr><td>SSH success/fail</td><td>attack_ssh_*.log</td></tr>
+          <tr><td>HTTP 2xx/403</td><td>attack_http_*.log</td></tr>
+          <tr><td>CPU/Memory avg</td><td>resource_*.csv</td></tr>
+          <tr><td>Blocked IPs</td><td>security_snapshot_*.json</td></tr>
+          <tr><td>Detection time</td><td>Polling interval 1s</td></tr>
+          <tr><td>Risk score</td><td>CVSS-like composite</td></tr>
+        </table>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>🤖 ML Baseline</h3>
+        <p style="font-size:.88rem;color:#304450">RandomForest pada NSL-KDD (125.973 baris) sebagai pembanding akademik deteksi intrusi berbasis data.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 6 ══ -->
+<div class="slide slide-content" id="s6">
+  <div class="slide-num">06 / 12</div>
+  <h2>📊 Hasil — HTTP Flood</h2>
+  <div class="two-col">
+    <div>
+      <table class="data">
+        <thead><tr><th>Mode</th><th>HTTP 2xx</th><th>HTTP 403</th><th>Other</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Baseline</strong></td><td style="color:var(--red);font-weight:700">4.800</td><td>8</td><td>1.633</td></tr>
+          <tr><td><strong>Fail2Ban</strong></td><td style="color:var(--warn);font-weight:700">3.000</td><td>5</td><td>1.027</td></tr>
+          <tr><td><strong>CrowdSec</strong></td><td style="color:var(--ok);font-weight:700">2.402</td><td>4</td><td>824</td></tr>
+        </tbody>
+      </table>
+      <div class="highlight" style="margin-top:16px">
+        <p>📉 <strong>CrowdSec</strong> mereduksi HTTP 2xx sebesar <strong>50%</strong> dibanding baseline<br/>
+        📉 <strong>Fail2Ban</strong> mereduksi sebesar <strong>37.5%</strong></p>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.85rem;font-weight:600;color:#304450;margin-bottom:10px">HTTP 2xx Responses (lebih rendah = lebih aman)</div>
+      <div class="bar-wrap">
+        <div class="bar-row">
+          <div class="bar-label">Baseline</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--red)">4.800</div></div>
+          <div class="bar-val" style="color:var(--red)">4.800</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Fail2Ban</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:62.5%;background:var(--warn)">3.000</div></div>
+          <div class="bar-val" style="color:var(--warn)">3.000</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">CrowdSec</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:50%;background:var(--ok)">2.402</div></div>
+          <div class="bar-val" style="color:var(--ok)">2.402</div>
+        </div>
+      </div>
+      <div style="font-size:.82rem;color:var(--muted);margin-top:16px">⚠️ HTTP flood masih menembus semua mode — rekomendasi: tambah nginx rate limiting (limit_req_zone)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 7 ══ -->
+<div class="slide slide-dark" id="s7">
+  <div class="slide-num">07 / 12</div>
+  <h2>🔑 Hasil — SSH Brute-Force</h2>
+  <div class="two-col">
+    <div>
+      <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+        <thead><tr style="background:rgba(255,255,255,.1)"><th style="padding:8px 10px;text-align:left;color:#c8dce5">Mode</th><th style="padding:8px 10px;text-align:left;color:#c8dce5">SSH Fail</th><th style="padding:8px 10px;text-align:left;color:#c8dce5">SSH Success</th><th style="padding:8px 10px;text-align:left;color:#c8dce5">Reduksi</th></tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:8px 10px;color:#f4f3ee"><strong>Baseline</strong></td><td style="padding:8px 10px;color:#c8dce5">270</td><td style="padding:8px 10px;color:var(--red);font-weight:700">28</td><td style="padding:8px 10px;color:var(--muted)">—</td></tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:8px 10px;color:#f4f3ee"><strong>Fail2Ban</strong></td><td style="padding:8px 10px;color:#c8dce5">216</td><td style="padding:8px 10px;color:var(--warn);font-weight:700">24</td><td style="padding:8px 10px;color:var(--warn)">−14.3%</td></tr>
+          <tr><td style="padding:8px 10px;color:#f4f3ee"><strong>CrowdSec</strong></td><td style="padding:8px 10px;color:#c8dce5">151</td><td style="padding:8px 10px;color:#6fcf97;font-weight:700">18</td><td style="padding:8px 10px;color:#6fcf97">−35.7%</td></tr>
+        </tbody>
+      </table>
+      <div class="highlight-dark" style="margin-top:16px">
+        <p>🏆 <strong>CrowdSec</strong> mereduksi login SSH berhasil sebesar <strong>35.7%</strong> vs baseline<br/>
+        CrowdSec mendeteksi <strong>2 events</strong>, Fail2Ban <strong>0 events</strong></p>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.85rem;font-weight:600;color:#c8dce5;margin-bottom:10px">SSH Login Berhasil (lebih rendah = lebih aman)</div>
+      <div class="bar-wrap">
+        <div class="bar-row">
+          <div class="bar-label light">Baseline</div>
+          <div class="bar-bg dark"><div class="bar-fill" style="width:100%;background:var(--red)">28</div></div>
+          <div class="bar-val" style="color:var(--red)">28</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label light">Fail2Ban</div>
+          <div class="bar-bg dark"><div class="bar-fill" style="width:85.7%;background:var(--warn)">24</div></div>
+          <div class="bar-val" style="color:var(--warn)">24</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label light">CrowdSec</div>
+          <div class="bar-bg dark"><div class="bar-fill" style="width:64.3%;background:#2f9e44">18</div></div>
+          <div class="bar-val" style="color:#6fcf97">18</div>
+        </div>
+      </div>
+      <div style="font-size:.82rem;color:rgba(200,220,229,.6);margin-top:16px">⚠️ Rekomendasi CRITICAL: nonaktifkan password auth SSH, gunakan key-only</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 8 ══ -->
+<div class="slide slide-content" id="s8">
+  <div class="slide-num">08 / 12</div>
+  <h2>⚡ Resource Consumption</h2>
+  <div class="two-col">
+    <div>
+      <table class="data">
+        <thead><tr><th>Mode</th><th>CPU Avg (%)</th><th>Mem Avg (%)</th><th>Overhead</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Baseline</strong></td><td>1.89</td><td>0.02</td><td>—</td></tr>
+          <tr><td><strong>Fail2Ban</strong></td><td style="color:var(--warn);font-weight:700">6.70</td><td>0.03</td><td style="color:var(--warn)">+4.81%</td></tr>
+          <tr><td><strong>CrowdSec</strong></td><td style="color:var(--ok);font-weight:700">6.26</td><td>0.08</td><td style="color:var(--ok)">+4.37%</td></tr>
+        </tbody>
+      </table>
+      <div class="highlight" style="margin-top:16px">
+        <p>✅ <strong>CrowdSec</strong> lebih efisien: overhead CPU <strong>4.37%</strong> vs Fail2Ban <strong>4.81%</strong><br/>
+        Selisih kecil (~0.44%) tapi CrowdSec memberikan perlindungan lebih baik</p>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.85rem;font-weight:600;color:#304450;margin-bottom:10px">CPU Average % per Mode</div>
+      <div class="bar-wrap">
+        <div class="bar-row">
+          <div class="bar-label">Baseline</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:28.2%;background:#607d8b">1.89%</div></div>
+          <div class="bar-val">1.89</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Fail2Ban</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--warn)">6.70%</div></div>
+          <div class="bar-val" style="color:var(--warn)">6.70</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">CrowdSec</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:93.4%;background:var(--ok)">6.26%</div></div>
+          <div class="bar-val" style="color:var(--ok)">6.26</div>
+        </div>
+      </div>
+      <div style="font-size:.82rem;color:var(--muted);margin-top:16px">Memory overhead keduanya sangat kecil (&lt;0.1%) — tidak signifikan untuk home server</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 9 ══ -->
+<div class="slide slide-content" id="s9">
+  <div class="slide-num">09 / 12</div>
+  <h2>🎯 Risk Score (CVSS-like, 0–10)</h2>
+  <div class="two-col">
+    <div>
+      <table class="data">
+        <thead><tr><th>Mode</th><th>Composite</th><th>Severity</th><th>Exposure</th><th>Detection</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Baseline</strong></td><td style="color:var(--red);font-weight:700">7.65</td><td><span class="badge badge-bad">HIGH</span></td><td>7.16</td><td>0.0</td></tr>
+          <tr><td><strong>Fail2Ban</strong></td><td style="color:var(--red);font-weight:700">7.69</td><td><span class="badge badge-bad">HIGH</span></td><td>6.26</td><td>0.0</td></tr>
+          <tr><td><strong>CrowdSec</strong></td><td style="color:var(--warn);font-weight:700">6.62</td><td><span class="badge badge-bad">HIGH</span></td><td>5.01</td><td>2.0</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:8px">Formula: 35% Exposure + 30% Detection + 20% Response + 15% CPU Overhead</div>
+      <div class="highlight" style="margin-top:12px">
+        <p>📊 CrowdSec memiliki risk score terendah (<strong>6.62</strong>) dan satu-satunya yang mendeteksi events (score 2.0)</p>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.85rem;font-weight:600;color:#304450;margin-bottom:10px">Risk Score Komposit (lebih rendah = lebih aman)</div>
+      <div class="bar-wrap">
+        <div class="bar-row">
+          <div class="bar-label">Baseline</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:76.5%;background:var(--red)">7.65</div></div>
+          <div class="bar-val" style="color:var(--red)">7.65</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Fail2Ban</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:76.9%;background:var(--red)">7.69</div></div>
+          <div class="bar-val" style="color:var(--red)">7.69</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">CrowdSec</div>
+          <div class="bar-bg"><div class="bar-fill" style="width:66.2%;background:var(--warn)">6.62</div></div>
+          <div class="bar-val" style="color:var(--warn)">6.62</div>
+        </div>
+      </div>
+      <div style="font-size:.82rem;color:var(--muted);margin-top:16px">⚠️ Semua mode masih HIGH — menunjukkan perlunya hardening tambahan (SSH key-only, nginx rate limit)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 10 ══ -->
+<div class="slide slide-dark" id="s10">
+  <div class="slide-num">10 / 12</div>
+  <h2>⚖️ Analisis Komparatif</h2>
+  <div class="two-col">
+    <div class="card-dark">
+      <h3>🛡️ Fail2Ban</h3>
+      <div style="margin-top:10px">
+        <div style="color:#6fcf97;font-weight:700;margin-bottom:6px">✅ Kelebihan</div>
+        <ul class="points light" style="font-size:.88rem">
+          <li>Ringan, mudah dikonfigurasi</li>
+          <li>Tidak butuh koneksi internet</li>
+          <li>Mature, dokumentasi lengkap</li>
+          <li>Integrasi langsung dengan iptables</li>
+        </ul>
+        <div style="color:#ff9a6c;font-weight:700;margin:12px 0 6px">❌ Kekurangan</div>
+        <ul class="points light" style="font-size:.88rem">
+          <li>Hanya reaktif (rule-based)</li>
+          <li>0 blocked IPs dalam eksperimen ini</li>
+          <li>Tidak ada threat intelligence</li>
+          <li>Efektivitas bergantung pada konfigurasi log path</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-dark">
+      <h3>🌐 CrowdSec</h3>
+      <div style="margin-top:10px">
+        <div style="color:#6fcf97;font-weight:700;margin-bottom:6px">✅ Kelebihan</div>
+        <ul class="points light" style="font-size:.88rem">
+          <li>Collaborative threat intelligence</li>
+          <li>Mendeteksi 2 events (Fail2Ban: 0)</li>
+          <li>Risk score lebih rendah (6.62 vs 7.69)</li>
+          <li>CPU overhead lebih efisien</li>
+          <li>Proaktif: blokir IP dari komunitas global</li>
+        </ul>
+        <div style="color:#ff9a6c;font-weight:700;margin:12px 0 6px">❌ Kekurangan</div>
+        <ul class="points light" style="font-size:.88rem">
+          <li>Butuh koneksi internet untuk CTI</li>
+          <li>Setup lebih kompleks (bouncer key)</li>
+          <li>Bergantung pada komunitas CrowdSec</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="highlight-dark" style="margin-top:16px">
+    <p>🏆 <strong>CrowdSec unggul</strong> dalam efektivitas mitigasi (35.7% vs 14.3% SSH reduction) dan efisiensi resource (CPU 6.26% vs 6.70%)</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 11 ══ -->
+<div class="slide slide-content" id="s11">
+  <div class="slide-num">11 / 12</div>
+  <h2>🤖 ML Baseline — NSL-KDD</h2>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <h3>📊 Metrik Model RandomForest</h3>
+        <table class="data" style="margin-top:8px">
+          <tr><td>Model</td><td><strong>RandomForestClassifier</strong></td></tr>
+          <tr><td>Dataset</td><td>NSL-KDD (1999)</td></tr>
+          <tr><td>Training rows</td><td><strong>125.973</strong></td></tr>
+          <tr><td>Test rows</td><td>22.544</td></tr>
+          <tr><td>Accuracy</td><td><strong style="color:var(--teal)">0.7216</strong></td></tr>
+          <tr><td>Weighted F1</td><td>0.6200</td></tr>
+          <tr><td>Macro F1</td><td>0.2354</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3>🔍 Interpretasi</h3>
+        <ul class="points">
+          <li>Akurasi 72.16% menunjukkan ML mampu mendeteksi pola serangan dengan cukup baik</li>
+          <li>Macro F1 rendah (0.235) karena distribusi kelas tidak seimbang di NSL-KDD</li>
+          <li>Pendekatan ML bersifat <strong>adaptif</strong> — bisa belajar dari pola baru</li>
+          <li>Rule-based (CrowdSec/Fail2Ban) lebih <strong>praktis</strong> untuk deployment real-time</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px">
+          <p>💡 ML dan rule-based bersifat <strong>komplementer</strong> — bukan kompetitor</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SLIDE 12 ══ -->
+<div class="slide slide-cover" id="s12">
+  <div class="slide-num">12 / 12</div>
+  <h2 style="color:#fff;border-bottom:3px solid var(--teal);padding-bottom:12px;margin-bottom:24px">✅ Kesimpulan & Rekomendasi</h2>
+  <div class="two-col">
+    <div>
+      <div class="card-dark">
+        <h3>📌 Kesimpulan Utama</h3>
+        <ul class="points light" style="margin-top:8px">
+          <li>CrowdSec mereduksi SSH login berhasil <strong>35.7%</strong>, Fail2Ban <strong>14.3%</strong></li>
+          <li>CrowdSec mereduksi HTTP 2xx <strong>50%</strong>, Fail2Ban <strong>37.5%</strong></li>
+          <li>CrowdSec lebih efisien: CPU overhead <strong>4.37%</strong> vs <strong>4.81%</strong></li>
+          <li>Risk score CrowdSec lebih rendah: <strong>6.62</strong> vs Fail2Ban <strong>7.69</strong></li>
+          <li>ML RandomForest (NSL-KDD): akurasi <strong>72.16%</strong> sebagai pembanding</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card-dark">
+        <h3>🛡️ Rekomendasi Defense-in-Depth</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div style="background:rgba(231,57,70,.15);border-left:3px solid var(--red);padding:8px 12px;border-radius:0 8px 8px 0">
+            <div style="font-size:.75rem;font-weight:700;color:#ff9a6c">CRITICAL</div>
+            <div style="font-size:.85rem;color:#c8dce5">Nonaktifkan password SSH, gunakan key-only auth</div>
+          </div>
+          <div style="background:rgba(230,119,0,.15);border-left:3px solid var(--warn);padding:8px 12px;border-radius:0 8px 8px 0">
+            <div style="font-size:.75rem;font-weight:700;color:#ffd43b">HIGH</div>
+            <div style="font-size:.85rem;color:#c8dce5">Verifikasi konfigurasi log path Fail2Ban</div>
+          </div>
+          <div style="background:rgba(42,157,143,.15);border-left:3px solid var(--teal);padding:8px 12px;border-radius:0 8px 8px 0">
+            <div style="font-size:.75rem;font-weight:700;color:#63e6be">MEDIUM</div>
+            <div style="font-size:.85rem;color:#c8dce5">Tambah nginx rate limiting (limit_req_zone)</div>
+          </div>
+          <div style="background:rgba(47,158,68,.15);border-left:3px solid var(--ok);padding:8px 12px;border-radius:0 8px 8px 0">
+            <div style="font-size:.75rem;font-weight:700;color:#6fcf97">LOW</div>
+            <div style="font-size:.85rem;color:#c8dce5">Deploy CrowdSec sebagai lapisan proteksi utama</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:24px;text-align:center;color:rgba(200,220,229,.5);font-size:.85rem">
+    🏆 Rekomendasi akhir: <strong style="color:var(--teal)">CrowdSec</strong> + SSH key-only + nginx rate limiting = Defense-in-Depth
+  </div>
+</div>
+
+</div><!-- /slides -->
+
+<!-- PROGRESS BAR -->
+<div class="progress"><div class="progress-fill" id="progress-fill" style="width:8.33%"></div></div>
+<div class="key-hint">← → atau klik tombol untuk navigasi</div>
+
+<script>
+const TOTAL = 12;
+let current = 1;
+
+function goTo(n) {
+  document.getElementById('s' + current)?.classList.remove('active');
+  current = Math.max(1, Math.min(TOTAL, n));
+  document.getElementById('s' + current)?.classList.add('active');
+  document.getElementById('slide-counter').textContent = current + ' / ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (current / TOTAL * 100) + '%';
+  document.getElementById('btn-prev').disabled = current === 1;
+  document.getElementById('btn-next').disabled = current === TOTAL;
+}
+
+document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
+document.getElementById('btn-next').addEventListener('click', () => goTo(current + 1));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(current - 1);
+});
+goTo(1);
+</script>
+</body>
+</html>

@@ -1,0 +1,703 @@
+$ python3 scripts/benchmark.py
+\n=== Running mode: baseline ===
+$ bash scripts/reset_environment.sh
+ Container target-ssh Stopping 
+ Container target-nginx Stopping 
+ Container target-ssh Stopped 
+ Container target-ssh Removing 
+ Container target-nginx Stopped 
+ Container target-nginx Removing 
+ Container target-ssh Removed 
+ Container target-nginx Removed 
+ Container sec-crowdsec Stopping 
+ Container sec-crowdsec Stopped 
+ Container sec-crowdsec Removing 
+ Container sec-crowdsec Removed 
+ Network eh_home_net Removing 
+ Network eh_home_net Removed 
+ Volume eh_crowdsec-db Removing 
+ Volume eh_crowdsec-config Removing 
+ Volume eh_crowdsec-config Removed 
+ Volume eh_crowdsec-db Removed 
+$ docker compose version
+$ docker compose up -d --build
+target=http://127.0.0.1:8080/ requests=500 concurrency=25
+ab tidak tersedia, fallback ke curl loop
+/home/hilian/venv/lib/python3.12/site-packages/paramiko/pkey.py:100: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+  "cipher": algorithms.TripleDES,
+/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py:259: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+  "class": algorithms.TripleDES,
+attempt=1 user=researcher pass=123456 status=FAIL
+attempt=2 user=researcher pass=password status=FAIL
+attempt=3 user=researcher pass=admin status=FAIL
+attempt=4 user=researcher pass=qwerty status=FAIL
+attempt=5 user=researcher pass=letmein status=FAIL
+attempt=6 user=researcher pass=research123 status=SUCCESS
+attempt=7 user=researcher pass=root123 status=FAIL
+attempt=8 user=researcher pass=123456 status=FAIL
+attempt=9 user=researcher pass=password status=FAIL
+saved: results/resource_baseline.csv
+attempt=10 user=researcher pass=admin status=FAIL
+attempt=11 user=researcher pass=qwerty status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=12 user=researcher pass=letmein status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=13 user=researcher pass=research123 status=FAIL
+attempt=14 user=researcher pass=root123 status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=15 user=researcher pass=123456 status=FAIL
+attempt=16 user=researcher pass=password status=FAIL
+attempt=17 user=researcher pass=admin status=FAIL
+attempt=18 user=researcher pass=qwerty status=FAIL
+attempt=19 user=researcher pass=letmein status=FAIL
+attempt=20 user=researcher pass=research123 status=SUCCESS
+attempt=21 user=researcher pass=root123 status=FAIL
+attempt=22 user=researcher pass=123456 status=FAIL
+attempt=23 user=researcher pass=password status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=24 user=researcher pass=admin status=FAIL
+attempt=25 user=researcher pass=qwerty status=FAIL
+attempt=26 user=researcher pass=letmein status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=27 user=researcher pass=research123 status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=28 user=researcher pass=root123 status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=29 user=researcher pass=123456 status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=30 user=researcher pass=password status=FAIL
+attempt=31 user=researcher pass=admin status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=32 user=researcher pass=qwerty status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=33 user=researcher pass=letmein status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=34 user=researcher pass=research123 status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=35 user=researcher pass=root123 status=FAIL
+attempt=36 user=researcher pass=123456 status=FAIL
+attempt=37 user=researcher pass=password status=FAIL
+Exception (client): Error reading SSH protocol banner
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2327, in _check_banner
+    buf = self.packetizer.readline(timeout)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 381, in readline
+    buf += self._read_timeout(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/packet.py", line 618, in _read_timeout
+    raise EOFError()
+EOFError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2143, in run
+    self._check_banner()
+  File "/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py", line 2331, in _check_banner
+    raise SSHException(
+paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+
+attempt=38 user=researcher pass=admin status=FAIL
+attempt=39 user=researcher pass=qwerty status=FAIL
+attempt=40 user=researcher pass=letmein status=FAIL
+$ docker compose version
+$ docker compose down -v --remove-orphans
+\n=== Running mode: fail2ban ===
+$ bash scripts/reset_environment.sh
+$ docker compose version
+$ docker compose -f docker-compose.yml -f docker-compose.fail2ban.yml up -d --build
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+target=http://127.0.0.1:8080/ requests=500 concurrency=25
+ab tidak tersedia, fallback ke curl loop
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+/home/hilian/venv/lib/python3.12/site-packages/paramiko/pkey.py:100: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+  "cipher": algorithms.TripleDES,
+/home/hilian/venv/lib/python3.12/site-packages/paramiko/transport.py:259: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
+  "class": algorithms.TripleDES,
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=1 user=researcher pass=123456 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=2 user=researcher pass=password status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=3 user=researcher pass=admin status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=4 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=5 user=researcher pass=letmein status=FAIL
+attempt=6 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=7 user=researcher pass=root123 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+saved: results/resource_fail2ban.csv
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=8 user=researcher pass=123456 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=9 user=researcher pass=password status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=10 user=researcher pass=admin status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=11 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=12 user=researcher pass=letmein status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=13 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=14 user=researcher pass=root123 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=15 user=researcher pass=123456 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=16 user=researcher pass=password status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=17 user=researcher pass=admin status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=18 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=19 user=researcher pass=letmein status=FAIL
+attempt=20 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=21 user=researcher pass=root123 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=22 user=researcher pass=123456 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=23 user=researcher pass=password status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=24 user=researcher pass=admin status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=25 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=26 user=researcher pass=letmein status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=27 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=28 user=researcher pass=root123 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=29 user=researcher pass=123456 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=30 user=researcher pass=password status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=31 user=researcher pass=admin status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=32 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=33 user=researcher pass=letmein status=FAIL
+attempt=34 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=35 user=researcher pass=root123 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+attempt=36 user=researcher pass=123456 status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=37 user=researcher pass=password status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=38 user=researcher pass=admin status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=39 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+attempt=40 user=researcher pass=letmein status=FAIL
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker exec sec-fail2ban fail2ban-client status
+$ docker exec sec-fail2ban fail2ban-client status sshd-docker
+$ docker exec sec-fail2ban fail2ban-client status nginx-http-flood
+$ docker compose version
+$ docker compose -f docker-compose.yml -f docker-compose.fail2ban.yml down -v --remove-orphans
+\n=== Running mode: crowdsec ===
+$ bash scripts/reset_environment.sh
+$ docker compose version
+$ docker compose -f docker-compose.yml -f docker-compose.crowdsec.yml up -d --build
+$ docker exec sec-crowdsec cscli decisions list -o json
+target=http://127.0.0.1:8080/ requests=500 concurrency=25
+ab tidak tersedia, fallback ke curl loop
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=1 user=researcher pass=123456 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=2 user=researcher pass=password status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+saved: results/resource_crowdsec.csv
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=3 user=researcher pass=admin status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=4 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=5 user=researcher pass=letmein status=FAIL
+attempt=6 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=7 user=researcher pass=root123 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=8 user=researcher pass=123456 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=9 user=researcher pass=password status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=10 user=researcher pass=admin status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=11 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=12 user=researcher pass=letmein status=FAIL
+attempt=13 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=14 user=researcher pass=root123 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=15 user=researcher pass=123456 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=16 user=researcher pass=password status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=17 user=researcher pass=admin status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=18 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=19 user=researcher pass=letmein status=FAIL
+attempt=20 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=21 user=researcher pass=root123 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=22 user=researcher pass=123456 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=23 user=researcher pass=password status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=24 user=researcher pass=admin status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=25 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=26 user=researcher pass=letmein status=FAIL
+attempt=27 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=28 user=researcher pass=root123 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=29 user=researcher pass=123456 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=30 user=researcher pass=password status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=31 user=researcher pass=admin status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=32 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=33 user=researcher pass=letmein status=FAIL
+attempt=34 user=researcher pass=research123 status=SUCCESS
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=35 user=researcher pass=root123 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=36 user=researcher pass=123456 status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=37 user=researcher pass=password status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=38 user=researcher pass=admin status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=39 user=researcher pass=qwerty status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+attempt=40 user=researcher pass=letmein status=FAIL
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker exec sec-crowdsec cscli metrics
+$ docker exec sec-crowdsec cscli decisions list -o json
+$ docker compose version
+$ docker compose -f docker-compose.yml -f docker-compose.crowdsec.yml down -v --remove-orphans
+Benchmark selesai. Lanjutkan dengan: python3 scripts/parse_results.py

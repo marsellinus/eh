@@ -1,0 +1,12 @@
+$ python3 scripts/ml_nsl_kdd_baseline.py
+=== ML Baseline NSL-KDD ===
+{
+  "model": "RandomForestClassifier",
+  "dataset": "NSL-KDD",
+  "train_rows": 125973,
+  "test_rows": 22544,
+  "accuracy": 0.721611071682044,
+  "weighted_f1": 0.6200323309800744,
+  "macro_f1": 0.23537376911591587
+}
+Saved: /home/hilian/Documents/eh/results/ml_nsl_kdd_metrics.json

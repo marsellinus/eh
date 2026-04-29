@@ -1,0 +1,10 @@
+{
+  "mode": "fail2ban",
+  "timestamp": 1777172618.6233635,
+  "fail2ban_status": "Status\n|- Number of jail:\t0\n`- Jail list:\t\n",
+  "detection_seconds": {
+    "http": null,
+    "ssh": null
+  },
+  "blocked_ips": []
+}

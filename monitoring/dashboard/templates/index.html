@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Security Lab Dashboard</title>
+<link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+<div class="aurora"></div>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="hero">
+    <div class="hero-text">
+      <h1>🔬 Security Lab Control Room</h1>
+      <p>CrowdSec vs Fail2Ban — Ethical Hacking Research Dashboard</p>
+    </div>
+    <div id="meta" class="meta">Memuat...</div>
+  </header>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi"><div class="kpi-label">Mode Terbaik</div><div class="kpi-val" id="kpi-best">-</div></div>
+    <div class="kpi"><div class="kpi-label">SSH Blocked</div><div class="kpi-val" id="kpi-ssh">-</div></div>
+    <div class="kpi"><div class="kpi-label">CPU Overhead</div><div class="kpi-val" id="kpi-cpu">-</div></div>
+    <div class="kpi"><div class="kpi-label">ML Accuracy</div><div class="kpi-val" id="kpi-ml">-</div></div>
+    <div class="kpi"><div class="kpi-label">Containers</div><div class="kpi-val" id="kpi-containers">-</div></div>
+    <div class="kpi"><div class="kpi-label">Charts</div><div class="kpi-val" id="kpi-charts">-</div></div>
+  </div>
+
+  <!-- TAB NAV -->
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="overview">📊 Overview</button>
+    <button class="tab-btn" data-tab="benchmark">⚙️ Benchmark</button>
+    <button class="tab-btn" data-tab="ml">🤖 ML & Dataset</button>
+    <button class="tab-btn" data-tab="report">📄 Laporan</button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- TAB: OVERVIEW                                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="tab-content active" id="tab-overview">
+
+    <div class="grid2">
+      <div class="panel">
+        <h2>🐳 Docker Containers</h2>
+        <table><thead><tr><th>Name</th><th>State</th><th>Status</th></tr></thead>
+        <tbody id="docker-tbody"><tr><td colspan="3">Memuat...</td></tr></tbody></table>
+      </div>
+      <div class="panel">
+        <h2>📋 Comparison Summary</h2>
+        <table><thead><tr><th>Mode</th><th>SSH Fail</th><th>SSH OK</th><th>HTTP 2xx</th><th>CPU%</th></tr></thead>
+        <tbody id="summary-tbody"><tr><td colspan="5">Belum ada data.</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h2>🎯 Risk Scores <small>(0–10, lebih rendah = lebih aman)</small></h2>
+        <div id="risk-bars">Memuat...</div>
+      </div>
+      <div class="panel">
+        <h2>📈 Comparative Analysis vs Baseline</h2>
+        <table><thead><tr><th>Mode</th><th>SSH↓%</th><th>HTTP↓%</th><th>Score</th><th>Verdict</th></tr></thead>
+        <tbody id="delta-tbody"><tr><td colspan="5">Belum ada data.</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h2>SSH Attempts per Mode</h2>
+        <svg class="bar-chart" id="chart-ssh" viewBox="0 0 600 200"></svg>
+      </div>
+      <div class="panel">
+        <h2>CPU Overhead per Mode</h2>
+        <svg class="bar-chart" id="chart-cpu" viewBox="0 0 600 200"></svg>
+      </div>
+    </div>
+
+    <div class="panel conclusion-panel">
+      <h2>📝 Kesimpulan & Hasil Akhir</h2>
+      <div id="conclusion-body"><p class="muted">Memuat kesimpulan...</p></div>
+    </div>
+
+  </div><!-- /tab-overview -->
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- TAB: BENCHMARK                                                  -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-benchmark">
+
+    <div class="panel">
+      <h2>🐳 Stack Management</h2>
+      <div class="actions">
+        <button class="btn btn-gray"   data-action="reset">🔄 Reset Env</button>
+        <button class="btn btn-teal"   data-action="start_baseline">▶ Start Baseline</button>
+        <button class="btn btn-teal"   data-action="start_fail2ban">▶ Start Fail2Ban</button>
+        <button class="btn btn-teal"   data-action="start_crowdsec">▶ Start CrowdSec</button>
+        <button class="btn btn-red"    data-action="stop">⏹ Stop All</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>🧪 Run Benchmark</h2>
+      <div class="actions">
+        <button class="btn btn-orange" data-action="run_baseline">Run Baseline</button>
+        <button class="btn btn-orange" data-action="run_fail2ban">Run Fail2Ban</button>
+        <button class="btn btn-orange" data-action="run_crowdsec">Run CrowdSec</button>
+        <button class="btn btn-orange" data-action="run_benchmark">🚀 Full Benchmark</button>
+        <button class="btn btn-gray"   data-action="parse">📊 Parse Results</button>
+        <button class="btn btn-gray"   data-action="report">📄 Build Report</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>📟 Job Console</h2>
+      <div class="job-status" id="job-status">Idle.</div>
+      <pre class="log" id="job-log">-</pre>
+    </div>
+
+    <div class="panel">
+      <h2>💡 Rekomendasi Keamanan</h2>
+      <div id="recs-area"><p class="muted">Belum ada rekomendasi.</p></div>
+    </div>
+
+  </div><!-- /tab-benchmark -->
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- TAB: ML & DATASET                                               -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-ml">
+
+    <div class="panel">
+      <h2>⬇ Fetch Dataset</h2>
+      <div class="actions">
+        <button class="btn btn-teal" data-action="fetch_nsl_kdd">Fetch NSL-KDD</button>
+        <button class="btn btn-teal" data-action="fetch_cicids">Fetch CICIDS2017</button>
+      </div>
+      <p class="hint">NSL-KDD: dataset klasik 1999. CICIDS2017: lebih modern, mencakup HTTP flood &amp; SSH brute-force.</p>
+    </div>
+
+    <div class="panel">
+      <h2>🤖 Jalankan ML Baseline</h2>
+      <div class="actions">
+        <button class="btn btn-orange" data-action="ml_nsl_kdd">ML — NSL-KDD</button>
+        <button class="btn btn-orange" data-action="ml_cicids">ML — CICIDS2017</button>
+        <button class="btn btn-orange" data-action="ml_custom">ML — Custom Log</button>
+      </div>
+      <p class="hint">Custom: menggunakan log eksperimen sendiri (results/attack_*.log) — paling relevan dengan kondisi lab.</p>
+    </div>
+
+    <div class="grid3" id="ml-cards">
+      <div class="panel ml-card" id="ml-card-nsl_kdd">
+        <h3>NSL-KDD</h3>
+        <div class="ml-card-body"><p class="muted">Belum ada data.</p></div>
+      </div>
+      <div class="panel ml-card" id="ml-card-cicids">
+        <h3>CICIDS2017</h3>
+        <div class="ml-card-body"><p class="muted">Belum ada data.</p></div>
+      </div>
+      <div class="panel ml-card" id="ml-card-custom">
+        <h3>Custom Log</h3>
+        <div class="ml-card-body"><p class="muted">Belum ada data.</p></div>
+      </div>
+    </div>
+
+    <div class="panel" id="justify-panel">
+      <h2>📐 Justifikasi Parameter Serangan</h2>
+      <div id="justify-body"><p class="muted">Memuat analisis...</p></div>
+    </div>
+
+  </div><!-- /tab-ml -->
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- TAB: LAPORAN                                                    -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-report">
+
+    <div class="panel">
+      <h2>🖼 Chart PNG</h2>
+      <div class="png-grid" id="png-grid"><p class="muted">Belum ada chart. Jalankan "Build Report" di tab Benchmark.</p></div>
+    </div>
+
+    <div class="panel">
+      <h2>📊 Raw Data — Comparison Summary</h2>
+      <pre class="log" id="raw-summary">-</pre>
+    </div>
+
+  </div><!-- /tab-report -->
+
+</div><!-- /page -->
+
+<script>
+const $ = id => document.getElementById(id);
+const PRIORITY_COLOR = {CRITICAL:'badge-bad',HIGH:'badge-warn',MEDIUM:'badge-info',LOW:'badge-ok'};
+const MODE_COLORS = {baseline:'#e63946',fail2ban:'#3a86ff',crowdsec:'#2a9d8f'};
+
+// ── Tab navigation ────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    $('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function badge(text, cls) { return `<span class="badge ${cls}">${text}</span>`; }
+
+function renderBarSVG(svgEl, rows, key) {
+  if (!rows?.length) { svgEl.innerHTML = ''; return; }
+  const W=600,H=200,padL=40,padB=36,padT=20,padR=10;
+  const cW=W-padL-padR, cH=H-padT-padB;
+  const vals = rows.map(r => Number(r[key]) || 0);
+  const max = Math.max(...vals, 1);
+  const bw = Math.floor(cW / rows.length * 0.55);
+  const gap = (cW - bw * rows.length) / (rows.length + 1);
+  let html = '';
+  rows.forEach((r, i) => {
+    const v = vals[i], bh = Math.round((v/max)*cH);
+    const x = padL + gap + (bw+gap)*i, y = padT+cH-bh;
+    const col = MODE_COLORS[r.mode] || '#607d8b';
+    html += `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="5" fill="${col}" opacity=".85"/>`;
+    html += `<text x="${x+bw/2}" y="${y-5}" text-anchor="middle" font-size="11" fill="#10232b" font-weight="700">${v}</text>`;
+    html += `<text x="${x+bw/2}" y="${H-8}" text-anchor="middle" font-size="11" fill="#304450">${r.mode}</text>`;
+  });
+  html += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+cH}" stroke="#bfd0d6"/>`;
+  html += `<line x1="${padL}" y1="${padT+cH}" x2="${W-padR}" y2="${padT+cH}" stroke="#bfd0d6"/>`;
+  svgEl.innerHTML = html;
+}
+
+function renderRiskBars(risks) {
+  if (!risks?.length) { $('risk-bars').textContent = 'Belum ada data.'; return; }
+  $('risk-bars').innerHTML = risks.map(r => {
+    const col = MODE_COLORS[r.mode] || '#607d8b';
+    const pct = Math.round((r.composite/10)*100);
+    return `<div class="risk-row">
+      <div class="risk-label">${r.mode}</div>
+      <div class="risk-bar-bg"><div class="risk-bar-fill" style="width:${pct}%;background:${col}"></div></div>
+      <div class="risk-val" style="color:${col}">${r.composite}</div>
+      ${badge(r.severity, PRIORITY_COLOR[r.severity]||'badge-info')}
+    </div>`;
+  }).join('');
+}
+
+function renderRecs(recs) {
+  if (!recs?.length) { $('recs-area').innerHTML = '<p class="muted">Belum ada rekomendasi.</p>'; return; }
+  $('recs-area').innerHTML = recs.map(r => `
+    <div class="rec">
+      <div class="rec-header">${badge(r.priority, PRIORITY_COLOR[r.priority]||'badge-info')}
+        <span class="rec-id">${r.id} · ${r.category}</span></div>
+      <div class="rec-finding">📌 ${r.finding}</div>
+      <div class="rec-action">→ ${r.action}</div>
+    </div>`).join('');
+}
+
+function renderContainers(containers) {
+  if (!containers?.length) {
+    $('docker-tbody').innerHTML = '<tr><td colspan="3">Tidak ada container aktif.</td></tr>';
+    $('kpi-containers').textContent = '0';
+    return;
+  }
+  $('docker-tbody').innerHTML = containers.map(c => {
+    const cls = c.state==='running'?'badge-ok':c.state==='exited'?'badge-bad':'badge-warn';
+    return `<tr><td>${c.name}</td><td>${badge(c.state,cls)}</td><td>${c.status}</td></tr>`;
+  }).join('');
+  $('kpi-containers').textContent = containers.filter(c=>c.state==='running').length+'/'+containers.length;
+}
+
+function renderSummary(rows) {
+  if (!rows?.length) { $('summary-tbody').innerHTML = '<tr><td colspan="5">Belum ada data.</td></tr>'; return; }
+  $('summary-tbody').innerHTML = rows.map(r =>
+    `<tr><td>${r.mode}</td><td>${r.ssh_fail}</td><td>${r.ssh_success}</td><td>${r.http_2xx}</td><td>${r.avg_cpu_percent}%</td></tr>`
+  ).join('');
+}
+
+function renderDeltas(deltas) {
+  if (!deltas?.length) { $('delta-tbody').innerHTML = '<tr><td colspan="5">Belum ada data.</td></tr>'; return; }
+  $('delta-tbody').innerHTML = deltas.map(d => {
+    const vcls = d.verdict==='Recommended'?'badge-ok':d.verdict==='Acceptable'?'badge-warn':'badge-bad';
+    return `<tr><td>${d.mode}</td><td>${d.ssh_attempts_reduced_pct}%</td><td>${d.http_success_reduced_pct}%</td><td>${d.effectiveness_score}</td><td>${badge(d.verdict,vcls)}</td></tr>`;
+  }).join('');
+}
+
+function renderJob(job) {
+  const s = $('job-status'), l = $('job-log');
+  if (job.running) {
+    s.innerHTML = `<span class="spin"></span>Running: <b>${job.action}</b>`;
+  } else if (job.action) {
+    const ok = job.returncode === 0;
+    s.innerHTML = `Last: <b>${job.action}</b> — ${ok?'✅ OK':'❌ Failed (code '+job.returncode+')'} at ${job.finished_at?.slice(11,19)}Z`;
+  } else {
+    s.textContent = 'Idle.';
+  }
+  l.textContent = job.log || '-';
+  l.scrollTop = l.scrollHeight;
+  document.querySelectorAll('.btn[data-action]').forEach(b => b.disabled = !!job.running);
+}
+
+function renderKPI(data) {
+  if (data.risks?.length) {
+    const best = data.risks.reduce((a,b) => a.composite < b.composite ? a : b);
+    $('kpi-best').textContent = best.mode;
+  }
+  if (data.summary?.length) {
+    const base = data.summary.find(r => r.mode==='baseline');
+    const prot = data.summary.filter(r => r.mode!=='baseline');
+    if (base && prot.length) {
+      const best = prot.reduce((a,b) => a.ssh_success < b.ssh_success ? a : b);
+      $('kpi-ssh').textContent = (base.ssh_success - best.ssh_success) + ' logins';
+    }
+    const crowd = data.summary.find(r => r.mode==='crowdsec');
+    const base2 = data.summary.find(r => r.mode==='baseline');
+    if (base2 && crowd) {
+      const diff = +(crowd.avg_cpu_percent - base2.avg_cpu_percent).toFixed(2);
+      $('kpi-cpu').textContent = (diff>=0?'+':'')+diff+'%';
+    }
+  }
+  $('kpi-charts').textContent = data.charts?.length ?? 0;
+}
+
+function renderPNGs(charts) {
+  if (!charts?.length) { $('png-grid').innerHTML = '<p class="muted">Belum ada chart.</p>'; return; }
+  $('png-grid').innerHTML = charts.map(f => `<img src="/charts/${f}" alt="${f}" loading="lazy"/>`).join('');
+}
+
+// ── ML cards ──────────────────────────────────────────────────────────────────
+function renderMLCard(id, ml) {
+  const el = $('ml-card-' + id)?.querySelector('.ml-card-body');
+  if (!el) return;
+  if (!ml || !Object.keys(ml).length) { el.innerHTML = '<p class="muted">Belum ada data.</p>'; return; }
+  el.innerHTML = `
+    <table>
+      <tr><td>Model</td><td>${ml.model||'-'}</td></tr>
+      <tr><td>Dataset</td><td>${ml.dataset||'-'}</td></tr>
+      <tr><td>Accuracy</td><td><strong>${ml.accuracy!=null?Number(ml.accuracy).toFixed(4):'-'}</strong></td></tr>
+      <tr><td>Weighted F1</td><td>${ml.weighted_f1!=null?Number(ml.weighted_f1).toFixed(4):'-'}</td></tr>
+      <tr><td>Macro F1</td><td>${ml.macro_f1!=null?Number(ml.macro_f1).toFixed(4):'-'}</td></tr>
+      <tr><td>Train rows</td><td>${ml.train_rows?.toLocaleString()??'-'}</td></tr>
+    </table>`;
+  // update KPI with nsl_kdd accuracy
+  if (id === 'nsl_kdd' && ml.accuracy) $('kpi-ml').textContent = Number(ml.accuracy).toFixed(4);
+}
+
+async function refreshML() {
+  try {
+    const res = await fetch('/api/ml-datasets');
+    const d = await res.json();
+    renderMLCard('nsl_kdd', d.nsl_kdd);
+    renderMLCard('cicids', d.cicids);
+    renderMLCard('custom', d.custom);
+  } catch(e) { console.error(e); }
+}
+
+// ── Justification ─────────────────────────────────────────────────────────────
+async function refreshJustify() {
+  try {
+    const res = await fetch('/api/justify');
+    const d = await res.json();
+    const el = $('justify-body');
+    if (d.error) { el.innerHTML = `<p class="muted">${d.error}</p>`; return; }
+    const j = d.parameter_justification || {};
+    const params = d.experiment_parameters || {};
+    const nsl = d.dataset_analysis?.nsl_kdd || {};
+
+    let html = '';
+    if (nsl.total_records) {
+      html += `<div class="justify-stat">
+        <span>NSL-KDD records</span><strong>${nsl.total_records.toLocaleString()}</strong>
+      </div>
+      <div class="justify-stat">
+        <span>DoS attacks</span><strong>${nsl.dos_attacks?.toLocaleString()} (${nsl.dos_pct}%)</strong>
+      </div>
+      <div class="justify-stat">
+        <span>Brute-force attacks</span><strong>${nsl.brute_force_attacks?.toLocaleString()} (${nsl.brute_force_pct}%)</strong>
+      </div>`;
+    }
+
+    ['http_flood','ssh_brute_force'].forEach(key => {
+      const item = j[key]; if (!item) return;
+      html += `<div class="justify-block">
+        <div class="justify-param">Parameter: <strong>${item.parameter}</strong></div>
+        <ul>${(item.rationale||[]).map(r=>`<li>${r}</li>`).join('')}</ul>
+        <div class="justify-verdict">✅ ${item.verdict}</div>
+      </div>`;
+    });
+
+    el.innerHTML = html || '<p class="muted">Tidak ada data justifikasi.</p>';
+  } catch(e) { console.error(e); }
+}
+
+// ── Conclusion ────────────────────────────────────────────────────────────────
+async function refreshConclusion() {
+  try {
+    const res = await fetch('/api/conclusion');
+    const d = await res.json();
+    const el = $('conclusion-body');
+    if (!d.available) { el.innerHTML = `<p class="muted">${d.text}</p>`; return; }
+    el.innerHTML = d.paragraphs.map(p=>`<p>${p}</p>`).join('');
+    if (d.winner) {
+      el.innerHTML += `<div class="winner-box">🏆 Pemenang: ${d.winner}</div>`;
+    }
+  } catch(e) { console.error(e); }
+}
+
+// ── Main refresh ──────────────────────────────────────────────────────────────
+async function refresh() {
+  try {
+    const res = await fetch('/api/data');
+    const d = await res.json();
+    $('meta').textContent = `Server: ${d.server_time?.slice(0,19)}Z`;
+    renderContainers(d.containers);
+    renderSummary(d.summary);
+    renderRiskBars(d.risks);
+    renderDeltas(d.deltas);
+    renderRecs(d.recs);
+    renderPNGs(d.charts);
+    renderKPI(d);
+    renderBarSVG($('chart-ssh'), d.summary, 'ssh_success');
+    renderBarSVG($('chart-cpu'), d.summary, 'avg_cpu_percent');
+    renderJob(d.job);
+    $('raw-summary').textContent = JSON.stringify(d.summary, null, 2);
+  } catch(e) { console.error(e); }
+}
+
+// ── Action buttons ────────────────────────────────────────────────────────────
+document.querySelectorAll('.btn[data-action]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const res = await fetch(`/api/run/${btn.dataset.action}`, {method:'POST'});
+    const d = await res.json();
+    if (!res.ok) alert(d.error || 'Gagal');
+    await refresh();
+  });
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+refresh();
+refreshML();
+refreshJustify();
+refreshConclusion();
+setInterval(refresh, 3000);
+setInterval(refreshML, 10000);
+setInterval(refreshConclusion, 15000);
+</script>
+</body>
+</html>

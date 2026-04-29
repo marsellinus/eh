@@ -1,0 +1,4 @@
+mode,http_2xx,http_403,http_other,ssh_fail,ssh_success,avg_cpu_percent,avg_mem_percent,detected_events,blocked_ips,detect_http_s,detect_ssh_s
+baseline,4800,8,1633,270,28,1.89,0.02,0,0,0.0,0.0
+fail2ban,3000,5,1027,216,24,6.7,0.03,0,0,0.0,0.0
+crowdsec,2402,4,824,151,18,6.26,0.08,2,0,0.0,0.0

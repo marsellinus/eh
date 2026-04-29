@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "title": "Comparative Analysis: CrowdSec vs Fail2Ban on Docker Home Server",
+    "generated_at": "2026-04-26T03:06:30.606504+00:00",
+    "tool": "ethical-hacking-research-framework",
+    "note": "For academic/research use only. All attacks performed in controlled lab."
+  },
+  "summary": [
+    {
+      "mode": "baseline",
+      "http_2xx": 4800,
+      "http_403": 8,
+      "http_other": 1633,
+      "ssh_fail": 270,
+      "ssh_success": 28,
+      "avg_cpu_percent": 1.89,
+      "avg_mem_percent": 0.02,
+      "detected_events": 0,
+      "blocked_ips": 0,
+      "detect_http_s": 0.0,
+      "detect_ssh_s": 0.0
+    },
+    {
+      "mode": "fail2ban",
+      "http_2xx": 3000,
+      "http_403": 5,
+      "http_other": 1027,
+      "ssh_fail": 216,
+      "ssh_success": 24,
+      "avg_cpu_percent": 6.7,
+      "avg_mem_percent": 0.03,
+      "detected_events": 0,
+      "blocked_ips": 0,
+      "detect_http_s": 0.0,
+      "detect_ssh_s": 0.0
+    },
+    {
+      "mode": "crowdsec",
+      "http_2xx": 2402,
+      "http_403": 4,
+      "http_other": 824,
+      "ssh_fail": 151,
+      "ssh_success": 18,
+      "avg_cpu_percent": 6.26,
+      "avg_mem_percent": 0.08,
+      "detected_events": 2,
+      "blocked_ips": 0,
+      "detect_http_s": 0.0,
+      "detect_ssh_s": 0.0
+    }
+  ],
+  "risk_scores": [
+    {
+      "mode": "baseline",
+      "exposure_score": 7.16,
+      "detection_score": 0.0,
+      "response_score": 0.0,
+      "overhead_score": 0.94,
+      "composite": 7.65,
+      "severity": "HIGH",
+      "cvss_vector": "AV:N/AC:L/PR:N/UI:N/EXP:7.2/DET:0.0/RSP:0.0/OVH:0.9"
+    },
+    {
+      "mode": "fail2ban",
+      "exposure_score": 6.26,
+      "detection_score": 0.0,
+      "response_score": 0.0,
+      "overhead_score": 3.35,
+      "composite": 7.69,
+      "severity": "HIGH",
+      "cvss_vector": "AV:N/AC:L/PR:N/UI:N/EXP:6.3/DET:0.0/RSP:0.0/OVH:3.4"
+    },
+    {
+      "mode": "crowdsec",
+      "exposure_score": 5.01,
+      "detection_score": 2.0,
+      "response_score": 0.0,
+      "overhead_score": 3.13,
+      "composite": 6.62,
+      "severity": "HIGH",
+      "cvss_vector": "AV:N/AC:L/PR:N/UI:N/EXP:5.0/DET:2.0/RSP:0.0/OVH:3.1"
+    }
+  ],
+  "comparative_analysis": [
+    {
+      "mode": "fail2ban",
+      "ssh_attempts_reduced_pct": 19.5,
+      "http_success_reduced_pct": 37.5,
+      "blocked_ips": 0,
+      "detected_events": 0,
+      "detection_time_http_s": 0.0,
+      "detection_time_ssh_s": 0.0,
+      "cpu_overhead_pct": 4.81,
+      "effectiveness_score": 6.1,
+      "verdict": "Insufficient"
+    },
+    {
+      "mode": "crowdsec",
+      "ssh_attempts_reduced_pct": 43.3,
+      "http_success_reduced_pct": 50.0,
+      "blocked_ips": 0,
+      "detected_events": 2,
+      "detection_time_http_s": 0.0,
+      "detection_time_ssh_s": 0.0,
+      "cpu_overhead_pct": 4.37,
+      "effectiveness_score": 35.5,
+      "verdict": "Acceptable"
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "REC-01",
+      "priority": "CRITICAL",
+      "category": "Hardening",
+      "finding": "SSH brute-force produced 28 successful logins in baseline.",
+      "action": "Disable password authentication; enforce SSH key-only login. Set MaxAuthTries=3 in sshd_config.",
+      "evidence": "ssh_success=28 (baseline)",
+      "applicable_to": [
+        "baseline",
+        "fail2ban",
+        "crowdsec"
+      ]
+    },
+    {
+      "id": "REC-02",
+      "priority": "HIGH",
+      "category": "Detection",
+      "finding": "FAIL2BAN produced 0 blocked IPs and 0 detected events.",
+      "action": "Verify fail2ban is correctly reading log files. Check log path mounts in docker-compose and jail/acquisition config.",
+      "evidence": "blocked_ips=0, detected_events=0",
+      "applicable_to": [
+        "fail2ban"
+      ]
+    },
+    {
+      "id": "REC-04",
+      "priority": "MEDIUM",
+      "category": "Hardening",
+      "finding": "HTTP flood reached the application layer in all modes.",
+      "action": "Add nginx rate limiting (limit_req_zone) and connection limits (limit_conn). Consider a WAF (ModSecurity) for layer-7 protection.",
+      "evidence": "http_2xx=4800 (baseline)",
+      "applicable_to": [
+        "baseline",
+        "fail2ban",
+        "crowdsec"
+      ]
+    },
+    {
+      "id": "REC-03",
+      "priority": "LOW",
+      "category": "Architecture",
+      "finding": "CROWDSEC achieved the highest effectiveness score (35.5/100) among tested solutions.",
+      "action": "Deploy CROWDSEC as the primary intrusion prevention layer. Combine with SSH key-only auth and nginx rate limiting for defence-in-depth.",
+      "evidence": "effectiveness_score=35.5",
+      "applicable_to": [
+        "crowdsec"
+      ]
+    }
+  ],
+  "ml_baseline": {
+    "model": "RandomForestClassifier",
+    "dataset": "NSL-KDD",
+    "train_rows": 125973,
+    "test_rows": 22544,
+    "accuracy": 0.721611071682044,
+    "weighted_f1": 0.6200323309800744,
+    "macro_f1": 0.23537376911591587
+  },
+  "charts": [
+    "results/charts/chart_ssh_attempts.png",
+    "results/charts/chart_http_responses.png",
+    "results/charts/chart_cpu_overhead.png",
+    "results/charts/chart_risk_scores.png"
+  ]
+}

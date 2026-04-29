@@ -1,0 +1,20 @@
+services:
+  fail2ban:
+    image: crazymax/fail2ban:1.1.0
+    container_name: sec-fail2ban
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./fail2ban/jail.local:/data/jail.local:ro
+      - ./fail2ban/filter.d:/data/filter.d:ro
+      - ./logs/nginx:/var/log/nginx:ro
+      - ./logs/ssh:/var/log/ssh:ro
+      - ./logs/fail2ban:/var/log/fail2ban
+      - ./logs/blocked_ips.txt:/data/blocked_ips.txt
+    environment:
+      - F2B_LOG_LEVEL=INFO
+      - F2B_DB_PURGE_AGE=1d
+      - TZ=Asia/Jakarta
+    restart: unless-stopped

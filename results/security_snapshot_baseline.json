@@ -1,0 +1,9 @@
+{
+  "mode": "baseline",
+  "timestamp": 1777172483.8278613,
+  "detection_seconds": {
+    "http": null,
+    "ssh": null
+  },
+  "blocked_ips": []
+}

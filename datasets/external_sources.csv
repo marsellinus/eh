@@ -1,0 +1,5 @@
+dataset_name,source_url,format,task,target_column,notes
+NSL-KDD Train (mirror 1),https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt,txt/csv-ready,intrusion-detection,label,Public GitHub mirror; comma separated without header
+NSL-KDD Test (mirror 1),https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt,txt/csv-ready,intrusion-detection,label,Public GitHub mirror; comma separated without header
+NSL-KDD Train (mirror 2),https://raw.githubusercontent.com/jmnwong/NSL-KDD-Dataset/master/KDDTrain+.txt,txt/csv-ready,intrusion-detection,label,Backup mirror
+NSL-KDD Test (mirror 2),https://raw.githubusercontent.com/jmnwong/NSL-KDD-Dataset/master/KDDTest+.txt,txt/csv-ready,intrusion-detection,label,Backup mirror

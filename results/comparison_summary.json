@@ -1,0 +1,44 @@
+[
+  {
+    "mode": "baseline",
+    "http_2xx": 4800,
+    "http_403": 8,
+    "http_other": 1633,
+    "ssh_fail": 270,
+    "ssh_success": 28,
+    "avg_cpu_percent": 1.89,
+    "avg_mem_percent": 0.02,
+    "detected_events": 0,
+    "blocked_ips": 0,
+    "detect_http_s": 0.0,
+    "detect_ssh_s": 0.0
+  },
+  {
+    "mode": "fail2ban",
+    "http_2xx": 3000,
+    "http_403": 5,
+    "http_other": 1027,
+    "ssh_fail": 216,
+    "ssh_success": 24,
+    "avg_cpu_percent": 6.7,
+    "avg_mem_percent": 0.03,
+    "detected_events": 0,
+    "blocked_ips": 0,
+    "detect_http_s": 0.0,
+    "detect_ssh_s": 0.0
+  },
+  {
+    "mode": "crowdsec",
+    "http_2xx": 2402,
+    "http_403": 4,
+    "http_other": 824,
+    "ssh_fail": 151,
+    "ssh_success": 18,
+    "avg_cpu_percent": 6.26,
+    "avg_mem_percent": 0.08,
+    "detected_events": 2,
+    "blocked_ips": 0,
+    "detect_http_s": 0.0,
+    "detect_ssh_s": 0.0
+  }
+]

@@ -1,0 +1,24 @@
+services:
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: sec-crowdsec
+    environment:
+      - COLLECTIONS=crowdsecurity/nginx crowdsecurity/sshd
+      - GID=1000
+      - TZ=Asia/Jakarta
+    volumes:
+      - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
+      - ./crowdsec/profiles.yaml:/etc/crowdsec/profiles.yaml:ro
+      - ./logs/nginx:/var/log/nginx:ro
+      - ./logs/ssh:/var/log/ssh:ro
+      - crowdsec-db:/var/lib/crowdsec/data/
+      - crowdsec-config:/etc/crowdsec/
+      - ./logs/crowdsec:/var/log/crowdsec
+    networks:
+      home_net:
+        ipv4_address: 172.28.0.20
+    restart: unless-stopped
+
+volumes:
+  crowdsec-db:
+  crowdsec-config:

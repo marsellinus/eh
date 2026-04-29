@@ -1,0 +1,11 @@
+$ python3 scripts/fetch_external_datasets.py
+[download] https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt -> /home/hilian/Documents/eh/datasets/external/KDDTrain+.txt
+[download] https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt -> /home/hilian/Documents/eh/datasets/external/KDDTest+.txt
+[convert] KDDTrain+.txt -> KDDTrain+.csv
+[convert] KDDTest+.txt -> KDDTest+.csv
+
+Selesai. File output:
+- datasets/external/KDDTest+.csv
+- datasets/external/KDDTest+.txt
+- datasets/external/KDDTrain+.csv
+- datasets/external/KDDTrain+.txt

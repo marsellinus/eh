@@ -1,0 +1,23 @@
+[DEFAULT]
+bantime = 600
+findtime = 120
+maxretry = 10
+backend = auto
+usedns = no
+action = iptables-multiport[name=%(__name__)s, port="%(port)s", protocol=tcp]
+
+[sshd-docker]
+enabled = true
+filter = sshd
+logpath = /var/log/ssh/auth.log
+port = 2222
+maxretry = 6
+
+[nginx-http-flood]
+enabled = true
+filter = nginx-http-flood
+logpath = /var/log/nginx/access.log
+port = 8081
+maxretry = 200
+findtime = 30
+bantime = 300

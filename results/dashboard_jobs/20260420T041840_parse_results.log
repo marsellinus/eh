@@ -1,0 +1,7 @@
+$ python3 scripts/parse_results.py
+=== Ringkasan Komparatif ===
+{'mode': 'baseline', 'http_2xx': 0, 'http_403': 0, 'http_other': 0, 'ssh_fail': 235, 'ssh_success': 23, 'avg_cpu_percent': 0.81, 'avg_mem_percent': 0.06, 'detected_events': 0, 'blocked_ips': 0, 'detect_http_s': 0.0, 'detect_ssh_s': 0.0}
+{'mode': 'fail2ban', 'http_2xx': 0, 'http_403': 0, 'http_other': 0, 'ssh_fail': 181, 'ssh_success': 19, 'avg_cpu_percent': 13.29, 'avg_mem_percent': 0.06, 'detected_events': 0, 'blocked_ips': 0, 'detect_http_s': 0.0, 'detect_ssh_s': 0.0}
+{'mode': 'crowdsec', 'http_2xx': 0, 'http_403': 0, 'http_other': 0, 'ssh_fail': 116, 'ssh_success': 13, 'avg_cpu_percent': 1.54, 'avg_mem_percent': 0.12, 'detected_events': 2, 'blocked_ips': 0, 'detect_http_s': 0.0, 'detect_ssh_s': 0.0}
+Tersimpan: /home/hilian/Documents/eh/results/comparison_summary.json
+Tersimpan: /home/hilian/Documents/eh/results/comparison_summary.csv
