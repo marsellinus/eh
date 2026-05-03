@@ -1,0 +1,20 @@
+{
+  "model": "RandomForestClassifier",
+  "dataset": "CICIDS2017",
+  "source_files": [
+    "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+    "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+    "Monday-WorkingHours.pcap_ISCX.csv",
+    "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+    "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+    "Tuesday-WorkingHours.pcap_ISCX.csv",
+    "Wednesday-workingHours.pcap_ISCX.csv"
+  ],
+  "train_rows": 2264594,
+  "test_rows": 566149,
+  "n_features": 78,
+  "accuracy": 0.9986787930385818,
+  "weighted_f1": 0.9986541549728225,
+  "macro_f1": 0.8800709675304642
+}

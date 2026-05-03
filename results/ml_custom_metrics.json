@@ -1,0 +1,32 @@
+{
+  "model": "RandomForestClassifier",
+  "dataset": "custom_experiment_logs",
+  "train_rows": 7565,
+  "test_rows": 1892,
+  "total_rows": 9457,
+  "classes": [
+    "attack",
+    "blocked",
+    "success"
+  ],
+  "accuracy": 0.44344608879492603,
+  "weighted_f1": 0.383549506783295,
+  "macro_f1": 0.5755020715250075,
+  "per_class": {
+    "attack": {
+      "precision": 0.24649859943977592,
+      "recall": 0.10091743119266056,
+      "f1": 0.14320585842148087
+    },
+    "blocked": {
+      "precision": 0.48454963839579224,
+      "recall": 0.7326043737574552,
+      "f1": 0.5833003561535417
+    },
+    "success": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  }
+}

@@ -135,7 +135,7 @@
       <h2>⬇ Fetch Dataset</h2>
       <div class="actions">
         <button class="btn btn-teal" data-action="fetch_nsl_kdd">Fetch NSL-KDD</button>
-        <button class="btn btn-teal" data-action="fetch_cicids">Fetch CICIDS2017</button>
+        <a class="btn btn-teal" href="https://cicresearch.ca/CICDataset/CIC-IDS-2017/download.php?file=CIC-IDS-2017%2FCSVs%2FMachineLearningCSV.zip" target="_blank">⬇ Download CICIDS2017</a>
       </div>
       <p class="hint">NSL-KDD: dataset klasik 1999. CICIDS2017: lebih modern, mencakup HTTP flood &amp; SSH brute-force.</p>
     </div>
@@ -327,10 +327,21 @@ function renderPNGs(charts) {
 }
 
 // ── ML cards ──────────────────────────────────────────────────────────────────
-function renderMLCard(id, ml) {
+function renderMLCard(id, ml, status) {
   const el = $('ml-card-' + id)?.querySelector('.ml-card-body');
   if (!el) return;
-  if (!ml || !Object.keys(ml).length) { el.innerHTML = '<p class="muted">Belum ada data.</p>'; return; }
+  if (!ml || !Object.keys(ml).length) {
+    if (id === 'cicids' && status === 'missing') {
+      el.innerHTML = '<p class="muted">Dataset belum tersedia. Download manual: ' +
+        '<a href="https://cicresearch.ca/CICDataset/CIC-IDS-2017/download.php?file=CIC-IDS-2017%2FCSVs%2FMachineLearningCSV.zip" target="_blank">MachineLearningCSV.zip</a> ' +
+        '→ extract CSV ke <code>datasets/external/cicids2017/</code> → klik "ML — CICIDS2017".</p>';
+    } else if (id === 'cicids' && status === 'has_csv') {
+      el.innerHTML = '<p class="muted">CSV tersedia. Klik "ML — CICIDS2017" untuk melatih model.</p>';
+    } else {
+      el.innerHTML = '<p class="muted">Belum ada data.</p>';
+    }
+    return;
+  }
   el.innerHTML = `
     <table>
       <tr><td>Model</td><td>${ml.model||'-'}</td></tr>
@@ -349,7 +360,7 @@ async function refreshML() {
     const res = await fetch('/api/ml-datasets');
     const d = await res.json();
     renderMLCard('nsl_kdd', d.nsl_kdd);
-    renderMLCard('cicids', d.cicids);
+    renderMLCard('cicids', d.cicids, d.cicids_status);
     renderMLCard('custom', d.custom);
   } catch(e) { console.error(e); }
 }

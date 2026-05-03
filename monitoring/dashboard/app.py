@@ -93,6 +93,9 @@ def _compose() -> list[str]:
     raise RuntimeError("docker compose not found")
 
 def _cmd_for(action: str) -> list[str]:
+    cmd = ACTIONS.get(action)
+    if cmd is not None:
+        return cmd
     c = _compose()
     if action == "start_baseline":
         return [*c, "up", "-d", "--build"]
@@ -102,10 +105,7 @@ def _cmd_for(action: str) -> list[str]:
         return [*c, "-f", "docker-compose.yml", "-f", "docker-compose.crowdsec.yml", "up", "-d", "--build"]
     if action == "stop":
         return [*c, "down", "-v", "--remove-orphans"]
-    cmd = ACTIONS.get(action)
-    if cmd is None:
-        raise ValueError(f"No command for action: {action}")
-    return cmd
+    raise ValueError(f"No command for action: {action}")
 
 def _run_bg(action: str) -> None:
     cmd = _cmd_for(action)
@@ -178,6 +178,10 @@ def _recs(rows: list, deltas: list, risks: list) -> list:
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
+@app.get("/favicon.ico")
+def favicon():
+    return "", 204
+
 @app.get("/")
 def index():
     return render_template("index.html", action_labels=ACTION_LABELS)
@@ -210,7 +214,12 @@ def api_ml_datasets():
         "cicids":  RESULTS / "ml_cicids_metrics.json",
         "custom":  RESULTS / "ml_custom_metrics.json",
     }
-    return jsonify({k: _read_json(v) for k, v in datasets.items()})
+    result = {k: _read_json(v) for k, v in datasets.items()}
+    cicids_dir = ROOT / "datasets" / "external" / "cicids2017"
+    if not result["cicids"]:
+        has_csv = cicids_dir.exists() and any(cicids_dir.glob("*.csv"))
+        result["cicids_status"] = "has_csv" if has_csv else "missing"
+    return jsonify(result)
 
 @app.get("/api/justify")
 def api_justify():

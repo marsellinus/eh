@@ -37,23 +37,9 @@ NSL_COLUMNS = [
 # File CSV tersedia via mirror GitHub (subset yang umum dipakai)
 CICIDS_DIR = OUT_DIR / "cicids2017"
 
-CICIDS_SOURCES = {
-    "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv": (
-        "https://raw.githubusercontent.com/CanadianInstituteForCybersecurity/"
-        "CIC-IDS-2017/master/GeneratedLabelledFlows/TrafficLabelling/"
-        "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv"
-    ),
-    "Tuesday-WorkingHours.pcap_ISCX.csv": (
-        "https://raw.githubusercontent.com/CanadianInstituteForCybersecurity/"
-        "CIC-IDS-2017/master/GeneratedLabelledFlows/TrafficLabelling/"
-        "Tuesday-WorkingHours.pcap_ISCX.csv"
-    ),
-}
-
-# Fallback: mirror Kaggle-style yang lebih stabil
-CICIDS_FALLBACK = (
-    "https://intrusion-detection.distrinet-research.be/WTMC2021/Data/"
-    "CIC-IDS-2017/MachineLearningCSV.zip"
+CICIDS_ZIP_URL = (
+    "https://cicresearch.ca/CICDataset/CIC-IDS-2017/download.php"
+    "?file=CIC-IDS-2017%2FCSVs%2FMachineLearningCSV.zip"
 )
 
 
@@ -93,24 +79,33 @@ def fetch_nsl_kdd() -> None:
 
 
 def fetch_cicids() -> None:
+    import zipfile
+
     print("\n=== CICIDS2017 ===")
     CICIDS_DIR.mkdir(parents=True, exist_ok=True)
 
-    success = False
-    for filename, url in CICIDS_SOURCES.items():
-        out = CICIDS_DIR / filename
-        if download_file(url, out):
-            success = True
-
-    if not success:
+    zip_path = CICIDS_DIR / "MachineLearningCSV.zip"
+    if not download_file(CICIDS_ZIP_URL, zip_path):
         print(
-            "\n[info] Download otomatis gagal. CICIDS2017 memerlukan registrasi manual.\n"
-            "Unduh dari: https://www.unb.ca/cic/datasets/ids-2017.html\n"
-            f"Letakkan file CSV di: {CICIDS_DIR}\n"
+            "\n[info] Download otomatis gagal. Unduh manual dari:\n"
+            "  https://cicresearch.ca/CICDataset/CIC-IDS-2017/download.php"
+            "?file=CIC-IDS-2017%2FCSVs%2FMachineLearningCSV.zip\n"
+            f"Letakkan MachineLearningCSV.zip di: {CICIDS_DIR}\n"
             "Kemudian jalankan ulang: python3 scripts/fetch_external_datasets.py --dataset cicids"
         )
-    else:
-        print(f"CICIDS2017 selesai. File di: {CICIDS_DIR}")
+        return
+
+    print(f"[extract] {zip_path}")
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        for member in zf.namelist():
+            if member.endswith(".csv"):
+                dest = CICIDS_DIR / Path(member).name
+                with zf.open(member) as src, dest.open("wb") as dst:
+                    dst.write(src.read())
+                print(f"  -> {dest.name}")
+
+    zip_path.unlink()
+    print(f"CICIDS2017 selesai. File di: {CICIDS_DIR}")
 
 
 def main() -> None:
